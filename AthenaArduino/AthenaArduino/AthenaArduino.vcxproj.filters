@@ -15,10 +15,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="CodigoArduino.ino" />
+    <None Include="AthenaArduino.ino" />
+    <None Include="2Classes.ino" />
+    <None Include="3Objetos.ino" />
+    <None Include="4FunctionGeral.ino" />
+    <None Include="5FunctionDesafio.ino" />
+    <None Include="6Setup.ino" />
+    <None Include="7Loop.ino" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="__vm\.CodigoArduino.vsarduino.h">
+    <ClInclude Include="__vm\.AthenaArduino.vsarduino.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

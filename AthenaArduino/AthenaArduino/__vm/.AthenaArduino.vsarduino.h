@@ -75,6 +75,12 @@ typedef void *__builtin_va_list;
 #define pgm_read_float(address_short) float()
 #define pgm_read_ptr(address_short)   short()
 
-#include "CodigoArduino.ino"
+#include "AthenaArduino.ino"
+#include "2Classes.ino"
+#include "3Objetos.ino"
+#include "4FunctionGeral.ino"
+#include "5FunctionDesafio.ino"
+#include "6Setup.ino"
+#include "7Loop.ino"
 #endif
 #endif
