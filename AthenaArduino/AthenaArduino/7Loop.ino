@@ -1,47 +1,137 @@
+int nLeitura[360];
+float leituraRadar[360];
+float variacao[360];
+float variacaoFiltrado[360];
+
 void loop()
 {
-	//Leitura do sensor de refletancia 
-	refletancia.read(sensores);
 
-	//Verifica e executa curvas
-	if (sensores[0] > corte || sensores[5] > corte)
+	for (int i = 0; i < 360; i++)
 	{
-		para(10);
+		nLeitura[i] = 0;
+		leituraRadar[i] = 0;
+	}
 
-		if (sensores[0] > corte && sensores[5] < corte)
+	giroscopio.reset();
+	giroscopio.calibrar();
+
+	unsigned long tempo = millis();
+
+	motores.setSpeeds(-200, 200);
+
+	while (millis() - tempo < 30000)
+	{
+		laserDir.leitura();
+		laserEsq.leitura();
+		giroscopio.medirGrau();
+
+		if (giroscopio.grau.z >= 360)
 		{
-			//Curva para a esquerda
-			curvaesq();
+			giroscopio.grau.z -= 360;
 		}
-		else if (sensores[5] > corte && sensores[0] < corte)
+
+		int indice = (int)giroscopio.grau.z;
+
+		leituraRadar[indice] += laserDir.distancia;
+		nLeitura[indice] += 1;
+
+		indice += 180;
+
+		if (indice >= 360)
 		{
-			//Curva para a direita
-			curvadir();
+			indice -= 360;
+		}
+
+		leituraRadar[indice] += laserEsq.distancia;
+		nLeitura[indice] += 1;
+
+
+	}
+	para(1);
+
+	for (int i = 0; i < 360; i++)
+	{
+		if (nLeitura[i] > 0)
+		{
+			leituraRadar[i] = leituraRadar[i] / nLeitura[i];
+		}
+	}
+
+	for (int i = 0; i < 360; i++)
+	{
+		if (i == 0)
+		{
+			variacao[i] = leituraRadar[0] - leituraRadar[359];
 		}
 		else
 		{
-			//Encruzilhada/Redutor
-			motores.setLeftSpeed(150);
-			motores.setRightSpeed(150);
-			delay(75);
+			variacao[i] = leituraRadar[i] - leituraRadar[i - 1];
 		}
 	}
 
-	pidLinha();
-
-	acelerometro.medirFiltrado();
-
-	if (acelerometro.eixoX > 2.5)
+	for (int i = 0; i < 360; i++)
 	{
-		rampa();
+		int indice = i - 5;
+
+		if (indice < 0)
+		{
+			indice += 360;
+		}
+
+		for (int j = 0; j < 11; j++)
+		{
+			variacaoFiltrado[i] += variacao[indice];
+			indice += 1;
+			if (indice > 359)
+			{
+				indice -= 359;
+			}
+		}
+
+		variacaoFiltrado[i] /= 11;
 	}
 
-	ultraCima.leitura();
+	int pico[4];
+	int grau[4];
+	int indice = 0;
 
-	if (ultraCima.distancia < 6.0 && ultraCima.distancia >1)
+	for (int i = 0; i < 360; i++)
 	{
-		para(10);
-		obstaculo();
-		obst = 0;
+		if (i == 0)
+		{
+			if (variacao[i] < 0 && variacao[359] >= 0)
+			{
+				pico[indice] = leituraRadar[i];
+				grau[indice] = i;
+				indice += 1;
+			}
+		}
+		else if (variacao[i] < 0 && variacao[i-1] >= 0 && i - indice > 75)
+		{
+			pico[indice] = leituraRadar[i];
+			grau[indice] = i;
+			indice += 1;
+		}
 	}
+
+	if (pico[0] > pico[1] && pico[0] > pico[2] && pico[0] > pico[3])
+	{
+		indice = grau[0];
+	}
+	else if (pico[1] > pico[2] && pico[1] > pico[3])
+	{
+		indice = grau[1];
+	}
+	else if (pico[2] > pico[3])
+	{
+		indice = grau[2];
+	}
+	else
+	{
+		indice = grau[3];
+	}
+
+	pidGiro(indice);
+
+	para(0);
 }
