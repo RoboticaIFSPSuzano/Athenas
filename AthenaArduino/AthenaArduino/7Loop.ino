@@ -1,10 +1,13 @@
-int nLeitura[360];
-float leituraRadar[360];
-float variacao[360];
-float variacaoFiltrado[360];
-
 void loop()
 {
+	para(0);
+	para(100);
+
+	giroscopio.reset();
+	giroscopio.calibrar();
+
+	int nLeitura[360];
+	float leituraRadar[360];
 
 	for (int i = 0; i < 360; i++)
 	{
@@ -12,12 +15,9 @@ void loop()
 		leituraRadar[i] = 0;
 	}
 
-	giroscopio.reset();
-	giroscopio.calibrar();
-
 	unsigned long tempo = millis();
 
-	motores.setSpeeds(-200, 200);
+	motores.setSpeeds(-400, 400);
 
 	while (millis() - tempo < 30000)
 	{
@@ -56,6 +56,9 @@ void loop()
 			leituraRadar[i] = leituraRadar[i] / nLeitura[i];
 		}
 	}
+
+	float variacao[360];
+	float variacaoFiltrado[360];
 
 	for (int i = 0; i < 360; i++)
 	{
@@ -106,7 +109,13 @@ void loop()
 				indice += 1;
 			}
 		}
-		else if (variacao[i] < 0 && variacao[i-1] >= 0 && i - indice > 75)
+		else if (variacao[i] < 0 && variacao[i - 1] >= 0 && indice == 0)
+		{
+			pico[indice] = leituraRadar[i];
+			grau[indice] = i;
+			indice += 1;
+		}
+		else if (variacao[i] < 0 && variacao[i - 1] >= 0 && i - grau[indice-1] > 45)
 		{
 			pico[indice] = leituraRadar[i];
 			grau[indice] = i;
@@ -114,15 +123,15 @@ void loop()
 		}
 	}
 
-	if (pico[0] > pico[1] && pico[0] > pico[2] && pico[0] > pico[3])
+	if (pico[0] < pico[1] && pico[0] < pico[2] && pico[0] < pico[3])
 	{
 		indice = grau[0];
 	}
-	else if (pico[1] > pico[2] && pico[1] > pico[3])
+	else if (pico[1] < pico[2] && pico[1] < pico[3])
 	{
 		indice = grau[1];
 	}
-	else if (pico[2] > pico[3])
+	else if (pico[2] < pico[3])
 	{
 		indice = grau[2];
 	}
@@ -131,7 +140,7 @@ void loop()
 		indice = grau[3];
 	}
 
-	pidGiro(indice);
+	pidGiroSemReset(indice);
 
 	para(0);
 }

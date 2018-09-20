@@ -50,6 +50,56 @@ void pidGiro(int grau)
 
 }
 
+void pidGiroSemReset(int grau)
+{
+	float kp = 10.13,
+		ki = 0.0,
+		kd = 39.46,
+		erro = 0,
+		erroAnt = 0,
+		integral = 0;
+
+	int diferenca,
+		velocidadeEsq,
+		velocidadeDir,
+		velocidade,
+		resetIntegral = 0;
+
+	para(500);
+
+	giroscopio.calibrar(eZ);
+
+	unsigned long tempo = millis();
+
+	do
+	{
+		giroscopio.medirGrau();
+
+		erroAnt = erro;
+
+		erro = grau - giroscopio.grau.z;
+
+		if (resetIntegral == 200);
+		{
+			resetIntegral = 0;
+			integral = 0;
+		}
+
+		integral += erro;
+
+		resetIntegral += 1;
+
+		velocidade = int((kp*erro) + (ki*integral) + (kd*(erro - erroAnt)));
+
+		velocidadeEsq = -velocidade;
+		velocidadeDir = +velocidade;
+
+		motores.setSpeeds(velocidadeEsq, velocidadeDir);
+
+	} while (abs(velocidade) > 50);// && ((millis() - tempo) < 10000));
+
+}
+
 void pidDeslocamento(float distancia)
 {
 	float kp = 5,
