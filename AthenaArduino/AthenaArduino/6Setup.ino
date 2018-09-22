@@ -8,9 +8,9 @@ void setup()
 	garra.attach(46);
 	ponta.attach(45);
 
-	garra.posicao = 9;
+	garra.posicao = 1;
 
-	garra.girar(10);
+	garra.girar(0);
 
 	braco.posicao = 179;
 	braco.girar(180);
