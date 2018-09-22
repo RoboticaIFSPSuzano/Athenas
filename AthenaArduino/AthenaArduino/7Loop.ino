@@ -1,3 +1,42 @@
+void filtro360(float *entrada)
+{
+	float filtrado[360];
+
+	for (int i = 0; i < 360; i++)
+	{
+		int indice = i - 5,
+			nLeitura = 0;
+
+		if (indice < 0)
+		{
+			indice += 360;
+		}
+
+		for (int j = 0; j < 11; j++)
+		{
+			if (indice > 359)
+			{
+				indice -= 359;
+			}
+
+			if (entrada[indice] != 0)
+			{
+				filtrado[i] += entrada[indice];
+				nLeitura += 1;
+			}
+			
+			indice += 1;
+		}
+
+		filtrado[i] /= nLeitura;
+	}
+	
+	for (int i = 0; i < 360; i++)
+	{
+		entrada[i] = filtrado[i];
+	}
+}
+
 void loop()
 {
 	para(0);
@@ -21,6 +60,7 @@ void loop()
 
 	while (millis() - tempo < 30000)
 	{
+		Serial3.println(millis());
 		laserDir.leitura();
 		laserEsq.leitura();
 		giroscopio.medirGrau();
@@ -48,6 +88,7 @@ void loop()
 
 	}
 	para(1);
+	
 
 	for (int i = 0; i < 360; i++)
 	{
@@ -57,8 +98,11 @@ void loop()
 		}
 	}
 
+
+	filtro360(leituraRadar);
+
+
 	float variacao[360];
-	float variacaoFiltrado[360];
 
 	for (int i = 0; i < 360; i++)
 	{
@@ -71,31 +115,11 @@ void loop()
 			variacao[i] = leituraRadar[i] - leituraRadar[i - 1];
 		}
 	}
-
-	for (int i = 0; i < 360; i++)
-	{
-		int indice = i - 5;
-
-		if (indice < 0)
-		{
-			indice += 360;
-		}
-
-		for (int j = 0; j < 11; j++)
-		{
-			variacaoFiltrado[i] += variacao[indice];
-			indice += 1;
-			if (indice > 359)
-			{
-				indice -= 359;
-			}
-		}
-
-		variacaoFiltrado[i] /= 11;
-	}
+	
+	//filtro360(variacao);
 
 	int pico[4];
-	int grau[4];
+	int grau[4];                                                                                                                                               
 	int indice = 0;
 
 	for (int i = 0; i < 360; i++)
@@ -123,6 +147,7 @@ void loop()
 		}
 	}
 
+
 	if (pico[0] < pico[1] && pico[0] < pico[2] && pico[0] < pico[3])
 	{
 		indice = grau[0];
@@ -139,6 +164,7 @@ void loop()
 	{
 		indice = grau[3];
 	}
+
 
 	pidGiroSemReset(indice);
 
