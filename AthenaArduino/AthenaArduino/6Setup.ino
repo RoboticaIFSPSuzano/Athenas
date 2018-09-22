@@ -15,8 +15,8 @@ void setup()
 	braco.posicao = 179;
 	braco.girar(180);
 
-	ponta.posicao = 79;
-	ponta.girar(80);
+	ponta.posicao = 179;
+	ponta.girar(180);
 
 	refletancia.init();
 

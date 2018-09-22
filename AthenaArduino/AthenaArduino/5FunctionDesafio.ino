@@ -320,7 +320,15 @@ void obstaculo()
 
 void bolinha()
 {
-	para(0);
+	garra.girar(180);
+	ponta.girar(90);
+	delay(200);
+	motores.setSpeeds(200, 200);
+	delay(5000);
+	para(1);
+	ponta.girar(180);
+	delay(200);
+	garra.girar(0);
 }
 
 void sala3()
