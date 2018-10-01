@@ -331,3 +331,68 @@ void pidAjuste()
 	para(100);
 
 }
+
+void testeGarra()
+{
+	garra.girar(180);
+	braco.girar(0);
+	ponta.girar(90);
+	delay(500);
+	para(1);
+	ponta.girar(180);
+	delay(500);
+	braco.girar(180);
+	garra.girar(0);
+}
+
+void testeUltrassom()
+{
+	ultraCima.leitura();
+	ultraFrente.leitura();
+	ultraEsq.leitura();
+	ultraDir.leitura();
+
+	if (bluetooth)
+	{
+		Serial3.print(" Cima: ");
+		Serial3.print(ultraCima.distancia);
+		Serial3.print("; Frente: ");
+		Serial3.print(ultraFrente.distancia);
+		Serial3.print("; Esq: ");
+		Serial3.print(ultraEsq.distancia);
+		Serial3.print("; Dir: ");
+		Serial3.println(ultraDir.distancia);
+	}
+	else
+	{
+		Serial.print(" Cima: ");
+		Serial.print(ultraCima.distancia);
+		Serial.print("; Frente: ");
+		Serial.print(ultraFrente.distancia);
+		Serial.print("; Esq: ");
+		Serial.print(ultraEsq.distancia);
+		Serial.print("; Dir: ");
+		Serial.println(ultraDir.distancia);
+	}
+}
+
+void testeLaser()
+{
+	laserDir.leitura();
+	laserEsq.leitura();
+
+	if (bluetooth)
+	{
+		Serial3.print(" Esq: ");
+		Serial3.print(laserEsq.distancia);
+		Serial3.print("; Dir: ");
+		Serial3.println(laserDir.distancia);
+	}
+	else
+	{
+		Serial.print(" Esq: ");
+		Serial.print(laserEsq.distancia);
+		Serial.print("; Dir: ");
+		Serial.println(laserDir.distancia);
+	}
+}
