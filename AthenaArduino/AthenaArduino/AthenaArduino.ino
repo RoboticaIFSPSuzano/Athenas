@@ -21,7 +21,10 @@
 #define eY 2
 #define eZ 3
 #define bluetooth 1
-
+#define CE 1
+#define CD 2
+#define BE 3
+#define BD 4
 
 //Declaração de Variáveis ------------------------------------------------
 
