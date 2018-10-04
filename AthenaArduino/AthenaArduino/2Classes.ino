@@ -1,4 +1,93 @@
 //Declaração de Classes --------------------------------------------------
+class Ponto
+{
+private:
+	int x,
+		y;
+
+public:
+
+	void set(float x, float y)
+	{
+		this->x = int(x * 1000);
+		this->y = int(y * 1000);
+	}
+
+	float getX()
+	{
+		return ((float)x) / 1000;
+	}
+
+	float getY()
+	{
+		return ((float)y) / 1000;
+	}
+};
+
+class Reta
+{
+public:
+	float a,
+		b,
+		sXY,
+		sX,
+		sY,
+		sX2,
+		sY2,
+		pearson;
+
+	int n;
+
+	Reta()
+	{
+		a = 0;
+		b = 0;
+		sXY = 0;
+		sX = 0;
+		sY = 0;
+		sX2 = 0;
+		sY2 = 0;
+		pearson = 0;
+
+		n = 0;
+	}
+
+	void inserir(Ponto a)
+	{
+		n += 1;
+
+		sXY += a.getX()* a.getY();
+		sX += a.getX();
+		sY += a.getY();
+		sX2 += pow(a.getX(), 2);
+		sY2 += pow(a.getY(), 2);
+	}
+
+	void calcular()
+	{
+		a = ((n*sXY) - (sX*sY)) / ((n*sX2) - (pow(sX, 2)));
+		b = (sY - (a*sX)) / n;
+		pearson = ((n*sXY) - (sX*sY)) / sqrt((n*sX2 - pow(sX, 2))*(n*sY2 - pow(sY, 2)));
+	}
+
+	/*float custo(Ponto a)
+	{
+		float tXY = sXY + (a.x*a.y),
+			tX = sX + a.x,
+			tY = sY + a.y,
+			tX2 = sX2 + pow(a.x, 2),
+			tY2 = sY2 + pow(a.y, 2);
+
+		int t = n + 1;
+
+		pearson = ((n*sXY) - (sX*sY)) / sqrt((n*sX2 - pow(sX, 2))*(n*sY2 - pow(sY, 2)));
+
+		float tPearson = ((t*tXY) - (tX*tY)) / sqrt((t*tX2 - pow(tX, 2))*(t*tY2 - pow(tY, 2)));
+
+		return tPearson - pearson;
+	}*/
+
+};
 
 class Giroscopio : public L3G //Controla o sensor giroscópio
 {
@@ -1120,4 +1209,5 @@ public:
 	}
 
 };
+
 //Fim da declaração de classes--------------------------------------------

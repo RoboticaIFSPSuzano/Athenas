@@ -14,6 +14,7 @@
 
 //Fim da inclusão de bibliotecas------------------------------------------
 
+
 //Constantes
 #define nMedidaAcel 20
 #define eX 1
@@ -43,5 +44,6 @@ erroLinhaAnterior = 0;
 
 
 const int prata = 138, preto = 316, branco = 40;
+const float distMax = 1.5;
 
 //Fim da declaração de variáveis------------------------------------------

@@ -381,3 +381,16 @@ void pidAjuste()
 	para(100);
 
 }
+
+float distancia(Ponto a, Ponto b);
+float distancia(Ponto ponto, Reta reta);
+
+float distancia(Ponto a, Ponto b)
+{
+	return sqrt(pow(a.getX() - b.getX(), 2) + pow(a.getY() - b.getY(), 2));
+}
+
+float distancia(Ponto ponto, Reta reta)
+{
+	return abs((reta.a*ponto.getX()) - ponto.getY() + reta.b) / sqrt(pow(reta.a, 2) + 1);
+}

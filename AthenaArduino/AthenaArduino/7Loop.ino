@@ -1,172 +1,147 @@
-void filtro360(float *entrada)
+void loop()
 {
-	float filtrado[360];
+	float leitura[360];
 
 	for (int i = 0; i < 360; i++)
 	{
-		int indice = i - 5,
-			nLeitura = 0;
+		leitura[i] = 1;
+	}
+
+	Ponto retangular[360];
+
+	for (int i = 0; i < 360; i++)
+	{
+		retangular[i].set(leitura[i] * cos(i*0.0174533), leitura[i] * sin(i*0.0174533));
+	}
+
+	int nLeitura;
+
+	Ponto retangularF[360];
+
+	for (int i = 0; i < 360; i++)
+	{
+		int indice = i - 5;
+
+		nLeitura = 0;
 
 		if (indice < 0)
 		{
 			indice += 360;
 		}
 
+		retangularF[i].set(0, 0);
+
 		for (int j = 0; j < 11; j++)
 		{
-			if (indice > 359)
+			if (retangular[indice].getX() != 0 && retangular[indice].getY() != 0)
 			{
-				indice -= 359;
-			}
+				retangularF[i].set(retangular[indice].getX() + retangularF[i].getX(), retangular[indice].getY() + retangularF[i].getY());
 
-			if (entrada[indice] != 0)
-			{
-				filtrado[i] += entrada[indice];
 				nLeitura += 1;
 			}
-			
+
+
 			indice += 1;
-		}
 
-		filtrado[i] /= nLeitura;
-	}
-	
-	for (int i = 0; i < 360; i++)
-	{
-		entrada[i] = filtrado[i];
-	}
-}
-
-void loop()
-{
-	para(0);
-	para(100);
-
-	giroscopio.reset();
-	giroscopio.calibrar();
-
-	int nLeitura[360];
-	float leituraRadar[360];
-
-	for (int i = 0; i < 360; i++)
-	{
-		nLeitura[i] = 0;
-		leituraRadar[i] = 0;
-	}
-
-	unsigned long tempo = millis();
-
-	motores.setSpeeds(-400, 400);
-
-	while (millis() - tempo < 30000)
-	{
-		Serial3.println(millis());
-		laserDir.leitura();
-		laserEsq.leitura();
-		giroscopio.medirGrau();
-
-		if (giroscopio.grau.z >= 360)
-		{
-			giroscopio.grau.z -= 360;
-		}
-
-		int indice = (int)giroscopio.grau.z;
-
-		leituraRadar[indice] += laserDir.distancia;
-		nLeitura[indice] += 1;
-
-		indice += 180;
-
-		if (indice >= 360)
-		{
-			indice -= 360;
-		}
-
-		leituraRadar[indice] += laserEsq.distancia;
-		nLeitura[indice] += 1;
-
-
-	}
-	para(1);
-	
-
-	for (int i = 0; i < 360; i++)
-	{
-		if (nLeitura[i] > 0)
-		{
-			leituraRadar[i] = leituraRadar[i] / nLeitura[i];
-		}
-	}
-
-
-	filtro360(leituraRadar);
-
-
-	float variacao[360];
-
-	for (int i = 0; i < 360; i++)
-	{
-		if (i == 0)
-		{
-			variacao[i] = leituraRadar[0] - leituraRadar[359];
-		}
-		else
-		{
-			variacao[i] = leituraRadar[i] - leituraRadar[i - 1];
-		}
-	}
-	
-	//filtro360(variacao);
-
-	int pico[4];
-	int grau[4];                                                                                                                                               
-	int indice = 0;
-
-	for (int i = 0; i < 360; i++)
-	{
-		if (i == 0)
-		{
-			if (variacao[i] < 0 && variacao[359] >= 0)
+			if (indice > 359)
 			{
-				pico[indice] = leituraRadar[i];
-				grau[indice] = i;
-				indice += 1;
+				indice = 0;
 			}
 		}
-		else if (variacao[i] < 0 && variacao[i - 1] >= 0 && indice == 0)
+
+		retangularF[i].set(retangularF[i].getX() / nLeitura, retangularF[i].getY() / nLeitura);
+	}
+
+	free(retangular);
+	free(nLeitura);
+
+	bool usado[360];
+
+	Reta reta[4];
+
+	for (int i = 0; i < 360; i++)
+	{
+		usado[i] = 0;
+
+		if (distancia(retangularF[0], retangularF[i]) <= 5)
 		{
-			pico[indice] = leituraRadar[i];
-			grau[indice] = i;
-			indice += 1;
+			reta[0].inserir(retangularF[i]);
+
+			usado[i] = 1;
 		}
-		else if (variacao[i] < 0 && variacao[i - 1] >= 0 && i - grau[indice-1] > 45)
+
+		if (distancia(retangularF[180], retangularF[i]) <= 5)
 		{
-			pico[indice] = leituraRadar[i];
-			grau[indice] = i;
-			indice += 1;
+			reta[1].inserir(retangularF[i]);
+
+			usado[i] = 1;
+		}
+
+		if (distancia(retangularF[90], retangularF[i]) <= 5)
+		{
+			reta[2].inserir(retangularF[i]);
+
+			usado[i] = 1;
+		}
+
+		if (distancia(retangularF[270], retangularF[i]) <= 5)
+		{
+			reta[3].inserir(retangularF[i]);
+
+			usado[i] = 1;
+		}
+	}
+
+	for (int i = 0; i < 4; i++)
+	{
+		reta[i].calcular();
+	}
+
+	for (int j = 0; j < 10; j++)
+	{
+		for (int i = 0; i < 360; i++)
+		{
+			if (distancia(retangularF[i], reta[0]) < distMax && usado[i] == 0)
+			{
+				reta[0].inserir(retangularF[i]);
+				usado[i] = 1;
+				reta[0].calcular();
+			}
+			if (distancia(retangularF[i], reta[1]) < distMax && usado[i] == 0)
+			{
+				reta[1].inserir(retangularF[i]);
+				usado[i] = 1;
+				reta[1].calcular();
+			}
+			if (distancia(retangularF[i], reta[2]) < distMax && usado[i] == 0)
+			{
+				reta[2].inserir(retangularF[i]);
+				usado[i] = 1;
+				reta[2].calcular();
+			}
+			if (distancia(retangularF[i], reta[3]) < distMax && usado[i] == 0)
+			{
+				reta[3].inserir(retangularF[i]);
+				usado[i] = 1;
+				reta[3].calcular();
+			}
+
 		}
 	}
 
 
-	if (pico[0] < pico[1] && pico[0] < pico[2] && pico[0] < pico[3])
-	{
-		indice = grau[0];
-	}
-	else if (pico[1] < pico[2] && pico[1] < pico[3])
-	{
-		indice = grau[1];
-	}
-	else if (pico[2] < pico[3])
-	{
-		indice = grau[2];
-	}
-	else
-	{
-		indice = grau[3];
-	}
 
 
-	pidGiroSemReset(indice);
+	for (int i = 0; i < 4; i++)
+	{
+		reta[i].calcular();
+	}
 
-	para(0);
+	for (int i = 0; i < 360; i++)
+	{
+		if (usado[i] == 0)
+		{
+		}
+	}
+
 }
