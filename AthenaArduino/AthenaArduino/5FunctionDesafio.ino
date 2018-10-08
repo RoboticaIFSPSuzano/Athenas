@@ -257,8 +257,8 @@ void obstaculo()
 	motores.setSpeeds(200, 200);
 	do
 	{
-		ultraDir.leitura();
-	} while (ultraDir.distancia < 15.0);
+		laserDir.leitura();
+	} while (laserDir.distancia < 15.0);
 
 	delay(200);
 	para(100);
@@ -275,10 +275,10 @@ void obstaculo()
 	{
 		do
 		{
-			ultraDir.leitura();
-		} while (ultraDir.distancia > 15.0 || ultraDir.distancia < 5.0);
-		ultraDir.leitura();
-	} while (ultraDir.distancia > 15.0 || ultraDir.distancia < 5.0);
+			laserDir.leitura();
+		} while (laserDir.distancia > 15.0 || laserDir.distancia < 5.0);
+		laserDir.leitura();
+	} while (laserDir.distancia > 15.0 || laserDir.distancia < 5.0);
 
 	delay(200);
 	motores.setSpeeds(200, 200);
@@ -287,10 +287,10 @@ void obstaculo()
 	{
 		do
 		{
-			ultraDir.leitura();
-		} while (ultraDir.distancia<40.0 && ultraDir.distancia > 2.0);
-		ultraDir.leitura();
-	} while (ultraDir.distancia<40.0 && ultraDir.distancia > 2.0);
+			laserDir.leitura();
+		} while (laserDir.distancia<40.0 && laserDir.distancia > 2.0);
+		laserDir.leitura();
+	} while (laserDir.distancia<40.0 && laserDir.distancia > 2.0);
 
 	delay(400);
 
