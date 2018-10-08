@@ -318,14 +318,54 @@ void obstaculo()
 	}
 }
 
-void bolinha()
+bool vitima()
 {
 	para(0);
+
+	return false;
+}
+
+void pegaVitima()
+{
+
 }
 
 void sala3()
 {
+	while (!vitima())
+	{
+		ultraFrente.leitura();
+		ultraCima.leitura();
 
+		if (abs(ultraFrente.distancia - ultraCima.distancia) > 5.0)
+		{
+			pegaVitima();
+			break;
+		}
+
+		pidGiro(90);
+	}
+	
+	for (int i = 0; i; i++)
+	{
+		do
+		{
+			ultraCima.leitura();
+			ultraTras.leitura();
+			if (ultraCima.distancia > ultraTras.distancia)
+			{
+				motores.setSpeeds(200, 200);
+			}
+			else
+			{
+				motores.setSpeeds(-200, -200);
+			}
+		} while (abs(ultraCima.distancia - ultraTras.distancia) > 1.0);
+
+		pidGiro(90);
+	}
+
+	zonaResgate();
 }
 
 void rampa()
@@ -660,7 +700,7 @@ int mapeamento()
 
 void soltaVitima()
 {
-
+	para(0);
 }
 
 void zonaResgate()

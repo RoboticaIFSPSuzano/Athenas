@@ -29,6 +29,7 @@ SensorUltrassonico ultraEsq(53, 52);
 SensorUltrassonico ultraDir(23, 22);
 SensorUltrassonico ultraFrente(31, 33);
 SensorUltrassonico ultraCima(25, 24);
+SensorUltrassonico ultraTras;
 
 //Laser
 Laser laserDir;
