@@ -359,7 +359,7 @@ void rampa()
 	sala3();
 }
 
-int mapeamento(int entrada)
+int mapeamento()
 {
 	float leitura[360];
 
@@ -493,23 +493,189 @@ int mapeamento(int entrada)
 	for (int i = 0; i < 4; i++)
 	{
 		reta[i].calcular();
+		reta[i].calcularRaiz();
+	}
+
+	int cima;
+	int baixo;
+	int esq;
+	int dir;
+
+	for (int i = 0; i < 4; i++)
+	{
+		if (reta[i].b > 0 && abs(reta[i].a) < 2)
+		{
+			cima = i;
+		}
+		else if (reta[i].b < 0 && abs(reta[i].a) < 2)
+		{
+			baixo = i;
+		}
+		else if (reta[i].raiz > 0 && abs(reta[i].a) > 2)
+		{
+			esq = i;
+		}
+		else if (reta[i].raiz < 0 && abs(reta[i].a) > 2)
+		{
+			dir = i;
+		}
+	}
+
+	Ponto cruzamento[4];
+
+	cruzamento[CE] = reta[cima].cruzamento(&reta[esq]);
+	cruzamento[CD] = reta[cima].cruzamento(&reta[dir]);
+	cruzamento[BE] = reta[baixo].cruzamento(&reta[esq]);
+	cruzamento[BD] = reta[baixo].cruzamento(&reta[dir]);
+
+	Reta r;
+
+	r.a = 0;
+
+
+	for (int i = 0; i < 360; i++)
+	{
+		if (usado[i] == 0)
+		{
+
+			r.b = retangularF[i].getY();
+
+			Ponto encontro[4];
+
+			for (int j = 0; j < 4; j++)
+			{
+				encontro[j] = reta[j].cruzamento(&r);
+			}
+
+			int vezes = 0;
+
+			//Verifica quantas vezes a reta cruza o quadrilátero
+
+			//Verifica se cruza com a reta de cima
+			if (encontro[cima].getX() > cruzamento[CE].getX() && encontro[cima].getX() < cruzamento[CD].getX())
+			{
+				vezes += 1;
+			}
+
+			//Verifica se cruza com a reta esquerda
+			if (cruzamento[CE].getX() > cruzamento[BE].getX())
+			{
+				if (encontro[esq].getX() > cruzamento[BE].getX() && encontro[esq].getX() < cruzamento[CE].getX())
+				{
+					vezes += 1;
+				}
+			}
+			else
+			{
+				if (encontro[esq].getX() > cruzamento[CE].getX() && encontro[esq].getX() < cruzamento[BE].getX())
+				{
+					vezes += 1;
+				}
+			}
+
+			//Verifica se cruza com a reta de baixo
+			if (encontro[baixo].getX() > cruzamento[BE].getX() && encontro[baixo].getX() < cruzamento[BD].getX())
+			{
+				vezes += 1;
+			}
+
+
+			//Verifica se cruza com a reta direita
+			if (cruzamento[CD].getX() > cruzamento[BE].getX())
+			{
+				if (encontro[dir].getX() > cruzamento[BD].getX() && encontro[esq].getX() < cruzamento[CD].getX())
+				{
+					vezes += 1;
+				}
+			}
+			else
+			{
+				if (encontro[esq].getX() > cruzamento[CD].getX() && encontro[esq].getX() < cruzamento[BD].getX())
+				{
+					vezes += 1;
+				}
+			}
+
+			if (vezes != 1)
+			{
+				usado[i] = 1;
+			}
+		}
+	}
+
+	free(retangularF);
+
+	int cluster[4];
+	int nPonto[4];
+	int anterior = -1;
+
+	int indice = 0;
+
+	for (int i = 0; i < 4; i++)
+	{
+		nPonto[i] = 0;
+		cluster[i] = 0;
 	}
 
 	for (int i = 0; i < 360; i++)
 	{
 		if (usado[i] == 0)
 		{
+			if (i - anterior < 2 || anterior == -1)
+			{
+				cluster[indice] += i;
+
+				nPonto[indice] += 1;
+
+				anterior = i;
+			}
+			else
+			{
+				anterior = i;
+				indice += 1;
+			}
 		}
 	}
 
-	int zr;
+	int maior = 0;
 
-	return zr;
+	for (int i = 0; i < 4; i++)
+	{
+		if (nPonto[i] != 0)
+		{
+			cluster[i] /= nPonto[i];
+		}
+	}
+
+	for (int i = 0; i < 4; i++)
+	{
+		if (nPonto[i] > nPonto[maior])
+		{
+			maior = i;
+		}
+	}
+
+	return cluster[maior];
+}
+
+void soltaVitima()
+{
+
 }
 
 void zonaResgate()
 {
-	mapeamento();
+	int grau = mapeamento();
 
+	pidGiroSemReset(grau);
 
+	motores.setSpeeds(200, 200);
+	
+	do {
+		ultraFrente.leitura();
+	} while (ultraFrente.distancia > 5.0);
+
+	para(100);
+
+	soltaVitima();
 }

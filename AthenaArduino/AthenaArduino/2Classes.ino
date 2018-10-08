@@ -13,6 +13,16 @@ public:
 		this->y = int(y * 1000);
 	}
 
+	void setX(float x)
+	{
+		this->x = (int)(x * 1000);
+	}
+
+	void setY(float y)
+	{
+		this->y = (int)(y * 1000);
+	}
+
 	float getX()
 	{
 		return ((float)x) / 1000;
@@ -34,7 +44,8 @@ public:
 		sY,
 		sX2,
 		sY2,
-		pearson;
+		pearson,
+		raiz;
 
 	int n;
 
@@ -70,22 +81,20 @@ public:
 		pearson = ((n*sXY) - (sX*sY)) / sqrt((n*sX2 - pow(sX, 2))*(n*sY2 - pow(sY, 2)));
 	}
 
-	/*float custo(Ponto a)
+	void calcularRaiz()
 	{
-		float tXY = sXY + (a.x*a.y),
-			tX = sX + a.x,
-			tY = sY + a.y,
-			tX2 = sX2 + pow(a.x, 2),
-			tY2 = sY2 + pow(a.y, 2);
+		raiz = -b / a;
+	}
 
-		int t = n + 1;
+	Ponto cruzamento(Reta *r)
+	{
+		Ponto c;
 
-		pearson = ((n*sXY) - (sX*sY)) / sqrt((n*sX2 - pow(sX, 2))*(n*sY2 - pow(sY, 2)));
+		c.setX((this->b - r->b) / (r->a - this->a));
+		c.setY((a*c.getX()) + b);
 
-		float tPearson = ((t*tXY) - (tX*tY)) / sqrt((t*tX2 - pow(tX, 2))*(t*tY2 - pow(tY, 2)));
-
-		return tPearson - pearson;
-	}*/
+		return c;
+	}
 
 };
 
