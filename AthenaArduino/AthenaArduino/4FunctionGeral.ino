@@ -1,6 +1,6 @@
 void pidGiro(int grau)
 {
-	float kp = 10.13,
+	float kp = 12.13,
 		ki = 0.0,
 		kd = 39.46,
 		erro = 0,
@@ -347,15 +347,15 @@ void testeGarra()
 
 void testeUltrassom()
 {
-	ultraCima.leitura();
+	//ultraCima.leitura();
 	ultraFrente.leitura();
 	//ultraEsq.leitura();
 	//ultraDir.leitura();
 
 	if (bluetooth)
 	{
-		Serial3.print(" Cima: ");
-		Serial3.print(ultraCima.distancia);
+		//Serial3.print(" Cima: ");
+		//Serial3.print(ultraCima.distancia);
 		Serial3.print("; Frente: ");
 		Serial3.print(ultraFrente.distancia);
 		/*Serial3.print("; Esq: ");
@@ -366,8 +366,8 @@ void testeUltrassom()
 	}
 	else
 	{
-		Serial.print(" Cima: ");
-		Serial.print(ultraCima.distancia);
+		//Serial.print(" Cima: ");
+		//Serial.print(ultraCima.distancia);
 		Serial.print("; Frente: ");
 		Serial.print(ultraFrente.distancia);
 		/*Serial.print("; Esq: ");

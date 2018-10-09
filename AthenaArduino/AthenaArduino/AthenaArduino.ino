@@ -19,14 +19,14 @@
 #define eX 1
 #define eY 2
 #define eZ 3
-#define bluetooth 1
+#define bluetooth 0
 
 
 //Declaração de Variáveis ------------------------------------------------
 
 int velocidadeesq, //Velocidade para o motor da esquerda
 velocidadedir, //Velocidade para o motor da direita
-velocidade = 300, //Velocidade máxima do robô
+velocidade = 200, //Velocidade máxima do robô
 corte = 325, //Valor de corte para os sensores de refletância - acima = preto/abaixo = branco
 tempo1 = 175; //Tempo para o robô ir para frente e verificar a configuração da linha em curvas
 
