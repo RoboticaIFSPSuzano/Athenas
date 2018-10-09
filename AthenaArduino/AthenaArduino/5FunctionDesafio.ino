@@ -237,14 +237,14 @@ void obstaculo()
 	do
 	{
 		motores.setSpeeds(-200, -200);
-		ultraCima.leitura();
-	} while (ultraCima.distancia < 6.0);
+		ultraFrente.leitura();
+	} while (ultraFrente.distancia < 6.0);
 
 	do
 	{
 		motores.setSpeeds(200, 200);
-		ultraCima.leitura();
-	} while (ultraCima.distancia > 6.0);
+		ultraFrente.leitura();
+	} while (ultraFrente.distancia > 6.0);
 
 
 	//Sair da linha
@@ -405,9 +405,9 @@ void obr()
 		rampa();
 	}
 
-	ultraCima.leitura();
+	ultraFrente.leitura();
 
-	if (ultraCima.distancia < 6.0 && ultraCima.distancia >1)
+	if (ultraFrente.distancia < 6.0 && ultraFrente.distancia >1)
 	{
 		para(10);
 		obstaculo();
