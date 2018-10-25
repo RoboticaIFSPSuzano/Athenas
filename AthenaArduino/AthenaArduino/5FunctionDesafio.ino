@@ -252,7 +252,7 @@ void obstaculo()
 		laserDir.leitura();
 	} while (laserDir.distancia > 15.0 || laserDir.distancia < 5.0);
 
-	delay(200);
+	delay(100);
 	motores.setSpeeds(200, 200);
 
 	do
@@ -264,7 +264,7 @@ void obstaculo()
 		laserDir.leitura();
 	} while (laserDir.distancia<40.0 && laserDir.distancia > 2.0);
 
-	delay(200);
+	delay(100);
 
 
 	para(500);
