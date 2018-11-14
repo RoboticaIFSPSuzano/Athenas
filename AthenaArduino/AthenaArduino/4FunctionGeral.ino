@@ -349,8 +349,8 @@ void testeUltrassom()
 {
 	ultraCima.leitura();
 	ultraFrente.leitura();
-	ultraEsq.leitura();
-	ultraDir.leitura();
+	//ultraEsq.leitura();
+	//ultraDir.leitura();
 
 	if (bluetooth)
 	{
@@ -358,10 +358,11 @@ void testeUltrassom()
 		Serial3.print(ultraCima.distancia);
 		Serial3.print("; Frente: ");
 		Serial3.print(ultraFrente.distancia);
-		Serial3.print("; Esq: ");
+		/*Serial3.print("; Esq: ");
 		Serial3.print(ultraEsq.distancia);
 		Serial3.print("; Dir: ");
-		Serial3.println(ultraDir.distancia);
+		Serial3.print(ultraDir.distancia);*/
+		Serial3.println();
 	}
 	else
 	{
@@ -369,10 +370,11 @@ void testeUltrassom()
 		Serial.print(ultraCima.distancia);
 		Serial.print("; Frente: ");
 		Serial.print(ultraFrente.distancia);
-		Serial.print("; Esq: ");
+		/*Serial.print("; Esq: ");
 		Serial.print(ultraEsq.distancia);
 		Serial.print("; Dir: ");
-		Serial.println(ultraDir.distancia);
+		Serial.println(ultraDir.distancia);*/
+		Serial.println();
 	}
 }
 
