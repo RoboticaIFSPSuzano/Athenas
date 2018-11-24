@@ -5,6 +5,12 @@ VisualStudioVersion = 15.0.28010.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Mapeamento", "Mapeamento\Mapeamento.vcxproj", "{5B98CD01-8267-4F40-9BDE-4822B82CC38E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EF50E34-911D-4B30-BF96-0BA47CBF2D55}"
+	ProjectSection(SolutionItems) = preProject
+		Mapeamento\Planilha.cpp = Mapeamento\Planilha.cpp
+		Mapeamento\Planilha.h = Mapeamento\Planilha.h
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
