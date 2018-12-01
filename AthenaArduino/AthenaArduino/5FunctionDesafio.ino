@@ -23,6 +23,21 @@ void curvadir()
 	delay(0.7*tempo1);
 	para(500);
 
+	for (int i = 0; i < 25; i++)
+	{
+		acelerometro.medirFiltrado();
+	}
+
+	if (acelerometro.eixoX > 1)
+	{
+		motores.setSpeeds(400, 400);
+
+		delay(250);
+
+		para(100);
+		return;
+	}
+
 	//Verfica a configuração da linha
 	refletancia.read(sensores);
 	if (sensores[1] > corte && sensores[5] > corte)
@@ -131,6 +146,17 @@ void curvaesq()
 	motores.setRightSpeed(150);
 	delay(0.7*tempo1);
 	para(500);
+
+	if (acelerometro.eixoX > 1)
+	{
+		motores.setSpeeds(400, 400);
+
+		delay(250);
+
+		para(100);
+		return;
+	}
+
 	//Verfica a configuração da linha
 	refletancia.read(sensores);
 	if (sensores[1] > corte && sensores[5] > corte)
