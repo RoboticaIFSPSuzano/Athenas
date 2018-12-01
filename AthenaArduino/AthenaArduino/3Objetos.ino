@@ -27,8 +27,8 @@ SensorUltrassonico ultraCima(&sensorU4);*/
 
 //SensorUltrassonico ultraEsq(53, 52);
 //SensorUltrassonico ultraDir(23, 22);
-SensorUltrassonico ultraFrente(31, 33);
-SensorUltrassonico ultraCima(25, 24);
+SensorUltrassonico ultraFrente(33, 35);
+//SensorUltrass'																				onico ultraCima(25, 24);
 
 //Laser
 Laser laserDir;

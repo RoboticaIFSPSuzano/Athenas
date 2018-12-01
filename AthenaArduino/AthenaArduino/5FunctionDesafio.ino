@@ -25,32 +25,6 @@ void curvadir()
 
 	//Verfica a configuração da linha
 	refletancia.read(sensores);
-	if (sensores[1] > corte && sensores[5] > corte)
-	{
-		motores.setLeftSpeed(150);
-		motores.setRightSpeed(150);
-		delay(1.5*tempo1);
-		para(100);
-		//Verfica a configuração da linha
-		refletancia.read(sensores);
-		if (sensores[0] > corte && sensores[5] > corte && sensores[2] > corte && sensores[3] > corte)
-		{
-			retorno();
-		}
-		else
-		{
-			unsigned long tempo = millis();
-			while (millis() - tempo > 75)
-			{
-				pidLinha();
-			}
-			/*motores.setLeftSpeed(150);
-			motores.setRightSpeed(150);
-			delay(75);*/
-		}
-	}
-	else
-	{
 		motores.setLeftSpeed(150);
 		motores.setRightSpeed(150);
 		delay(1.5*tempo1);
@@ -60,11 +34,25 @@ void curvadir()
 
 		if (sensores[4] > corte)
 		{
+			for (int i = 0; i < 25; i++)
+			{
+				acelerometro.medirFiltrado();
+			}
+
+			if (acelerometro.eixoX > 0.8)
+			{
+				motores.setSpeeds(400, 400);
+
+				delay(250);
+
+				para(100);
+				return;
+			}
 			//Curva com fita verde
 
 			motores.setLeftSpeed(150);
 			motores.setRightSpeed(150);
-			delay(900);
+			delay(450);
 			pidGiro(-85);
 			para(100);
 			refletancia.read(sensores);
@@ -115,7 +103,6 @@ void curvadir()
 				}
 			}
 		}
-	}
 
 }
 
@@ -133,33 +120,7 @@ void curvaesq()
 	para(500);
 	//Verfica a configuração da linha
 	refletancia.read(sensores);
-	if (sensores[1] > corte && sensores[5] > corte)
-	{
-		motores.setLeftSpeed(150);
-		motores.setRightSpeed(150);
-		delay(1.5*tempo1);
-		para(100);
-		//Verfica a configuração da linha
-		refletancia.read(sensores);
-		if (sensores[0] > corte && sensores[5] > corte && sensores[2] > corte && sensores[3] > corte)
-		{
-			retorno();
-		}
-		else
-		{
-			/*motores.setLeftSpeed(150);
-			motores.setRightSpeed(150);
-			delay(75);*/
-			unsigned long tempo = millis();
-			while ((millis() - tempo) < 75)
-			{
-				pidLinha();
-			}
-		}
 
-	}
-	else
-	{
 		motores.setLeftSpeed(150);
 		motores.setRightSpeed(150);
 		delay(1.5*tempo1);
@@ -169,11 +130,24 @@ void curvaesq()
 
 		if (sensores[1] > corte)
 		{
+			for (int i = 0; i < 25; i++)
+			{
+				acelerometro.medirFiltrado();
+			}
+
+			if (acelerometro.eixoX > 0.8)
+			{
+				motores.setSpeeds(400, 400);
+				delay(250);
+				para(100);
+				return;
+			}
+
 			//Curva com fita verde
 
 			motores.setLeftSpeed(150);
 			motores.setRightSpeed(150);
-			delay(950);
+			delay(450);
 			pidGiro(85);
 			para(100);
 
@@ -225,8 +199,6 @@ void curvaesq()
 				}
 			}
 		}
-	}
-
 }
 
 void obstaculo()
@@ -260,7 +232,7 @@ void obstaculo()
 		laserDir.leitura();
 	} while (laserDir.distancia < 15.0);
 
-	delay(200);
+	delay(500);
 	para(100);
 
 	//90º
@@ -280,7 +252,7 @@ void obstaculo()
 		laserDir.leitura();
 	} while (laserDir.distancia > 15.0 || laserDir.distancia < 5.0);
 
-	delay(200);
+	delay(100);
 	motores.setSpeeds(200, 200);
 
 	do
@@ -292,13 +264,13 @@ void obstaculo()
 		laserDir.leitura();
 	} while (laserDir.distancia<40.0 && laserDir.distancia > 2.0);
 
-	delay(400);
+	delay(100);
 
 
 	para(500);
 
 	//90º
-	pidGiro(-90);
+	pidGiro(-85);
 
 	motores.setSpeeds(200, 200);
 	do
