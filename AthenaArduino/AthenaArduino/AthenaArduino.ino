@@ -1,8 +1,9 @@
-﻿#include <QTRSensors.h> //Sensor de refletância
+﻿//Inclusão de Bibliotecas ----------------------------------------------------
+#include <QTRSensors.h> //Sensor de refletância
 #include <ZumoReflectanceSensorArray.h> //Sensor de refletância
 #include <ZumoMotors.h> //Motores
 #include <Pushbutton.h> //Botão
-#include <Wire.h>
+#include <Wire.h> //Comunicação I2C
 #include <LSM303.h> //Acelerômetro
 #include <L3G.h> //Giroscópio
 #include <Ultrasonic.h>//Ultrassônico
@@ -15,11 +16,11 @@
 //Fim da inclusão de bibliotecas------------------------------------------
 
 //Constantes
-#define nMedidaAcel 20
+#define nMedidaAcel 20 //Medidas filtro média móvel do acelerômetro
 #define eX 1
 #define eY 2
 #define eZ 3
-#define bluetooth 1
+#define bluetooth 1 //Utilizar (1) ou não (0) o módulo bluetooth para comunicação serial
 
 
 //Declaração de Variáveis ------------------------------------------------
@@ -32,16 +33,14 @@ tempo1 = 175; //Tempo para o robô ir para frente e verificar a configuração d
 
 unsigned int sensores[6]; //Recebe os valores dos sensores
 
-int obst = 1;
 
-int medidaAcel[nMedidaAcel],
-eixoX = 0;
+int medidaAcel[nMedidaAcel], //Medidas do filtro de média móvel do sensor acelerômetro
+eixoX = 0; //Valor final do filtro de média móvel do acelerômetro
 
-float erroLinha = 0,
+//Variáveis para o pidLinha
+float erroLinha = 0, 
 integralLinha,
 erroLinhaAnterior = 0;
 
-
-const int prata = 138, preto = 316, branco = 40;
 
 //Fim da declaração de variáveis------------------------------------------

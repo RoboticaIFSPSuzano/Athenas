@@ -1,18 +1,18 @@
-void pidGiro(int grau)
+void pidGiro(int grau) //Implementa um controlador PID para rotacionar o robô
 {
-	float kp = 10.13,
-		ki = 0.0,
-		kd = 39.46,
-		erro = 0,
-		erroAnt = 0,
-		integral = 0;
+	float kp = 10.13, //Constante Kp do PID
+		ki = 0.0, //Constante Ki do PID
+		kd = 39.46, //Contante Kd do PID
+		erro = 0, //Erro
+		erroAnt = 0, //Erro anterior
+		integral = 0; //Valor da integral do erro
 
-	int diferenca,
-		velocidadeEsq,
-		velocidadeDir,
-		velocidade,
-		resetIntegral = 0;
+	int velocidadeEsq, //Velocidade a ser comandada no motor esquerdo
+		velocidadeDir, //Velocidade a ser comandada no motor direito
+		velocidade, //Velocidade saída do controlador
+		resetIntegral = 0; //Tempo de reset para integral
 
+	//Calibra o giroscopio
 	giroscopio.reset();
 
 	para(500);
@@ -21,6 +21,7 @@ void pidGiro(int grau)
 
 	unsigned long tempo = millis();
 
+	//Efetua a rotação
 	do
 	{
 		giroscopio.medirGrau();
@@ -50,27 +51,28 @@ void pidGiro(int grau)
 
 }
 
-void pidDeslocamento(float distancia)
+void pidDeslocamento(float distancia) //Implementa um controle PID para movimentar linearmente o robô
 {
-	float kp = 5,
-		ki = 15,
-		kd = 0,
-		erro = 0,
-		erroAnt = 0,
-		integral = 0;
+	float kp = 5, //Constante Kp do controle PID
+		ki = 15, //Constante Ki do controle PID
+		kd = 0, //Controle Kd do controle PID
+		erro = 0, //Erro
+		erroAnt = 0, //Erro anterior
+		integral = 0; //Integral do erro
 
-	int diferenca,
-		velocidadeEsq,
-		velocidadeDir,
-		velocidade,
-		resetIntegral = 0;
+	int velocidadeEsq, //Velocidade a ser comandada ao motor esquerdo
+		velocidadeDir, //Velocidade a ser comandada ao motor direito
+		velocidade, //Velocidade saída do controlador
+		resetIntegral = 0; //Tempo de reset da integral
 
+	//Calibra o sensor acelerômetro
 	acelerometro.reset();
 
 	para(500);
 
 	acelerometro.calibrar(eX);
 
+	//Efetua a movimentação
 	do
 	{
 		acelerometro.medirDeslocamento();
@@ -101,7 +103,7 @@ void pidDeslocamento(float distancia)
 	para(0);
 }
 
-void para(int tempo)
+void para(int tempo) //Para o robô por um tempo, ou até pressionar o botão (tempo = 0)
 {
 	if (tempo == 0)
 	{
@@ -115,9 +117,8 @@ void para(int tempo)
 	}
 }
 
-void pidLinha()
+void pidLinha() //Calcula a posição do robô em relação a linha e executa a resposta de acordo com o algoritimo PID  
 {
-	//Calcula a posição do robô e executa a resposta de acordo com o algoritimo PID  
 	float convertido[6], //Recebe os valores dos sensores escalados/ponderados
 		posicao = 0, //Recebe a posição da linha
 		diferenca, //Diferença entre as velocidades dos motores
@@ -181,11 +182,8 @@ void pidLinha()
 	motores.setRightSpeed(velocidadedir);
 }
 
-void pidLinha(int velocidade)
+void pidLinha(int velocidade) //Calcula a posição do robô em relação a linha e executa a resposta de acordo com o algoritimo PID, com velocidade dada
 {
-	//Calcula a posição do robô e executa a resposta de acordo com o algoritimo PID
-
-
 	float convertido[6], //Recebe os valores dos sensores escalados/ponderados
 		posicao = 0, //Recebe a posição da linha
 		erroLinha = 0, //erroLinha da posição do motor
@@ -248,7 +246,7 @@ void pidLinha(int velocidade)
 	motores.setRightSpeed(velocidadedir);
 }
 
-void pidAjuste()
+void pidAjuste() //Ajusta o robô a linha (não funciona)
 {
 
 	float leitura[5];
@@ -332,7 +330,7 @@ void pidAjuste()
 
 }
 
-void testeGarra()
+void testeGarra() //Efetua um teste da garra
 {
 	garra.girar(180);
 	braco.girar(0);
@@ -345,7 +343,7 @@ void testeGarra()
 	garra.girar(0);
 }
 
-void testeUltrassom()
+void testeUltrassom() //Efetua um teste dos sensores ultrassônicos, enviando as leituras para a porta serial
 {
 	ultraCima.leitura();
 	ultraFrente.leitura();
@@ -378,7 +376,7 @@ void testeUltrassom()
 	}
 }
 
-void testeLaser()
+void testeLaser() //Efetua um teste dos sensores laser, enviando a leitura para a serial
 {
 	laserDir.leitura();
 	laserEsq.leitura();

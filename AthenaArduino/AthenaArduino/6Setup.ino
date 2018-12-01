@@ -8,6 +8,7 @@ void setup()
 	garra.attach(46);
 	ponta.attach(45);
 
+	//Movimenta os motores para as posições corretas
 	garra.posicao = 1;
 
 	garra.girar(0);
@@ -18,19 +19,23 @@ void setup()
 	ponta.posicao = 179;
 	ponta.girar(180);
 
+	//Inicia os sensores de refletância
 	refletancia.init();
 
+	//Inicia a comunicação I2C
 	Wire.begin();
 
-	laserDir.setShutDown(32);
+	//Configura os endereços dos sensores laser
+	laserDir.setShutDown(32); //Configura o pino de desativação do sensor direito
 
-	laserDir.desabilitar();
+	laserDir.desabilitar(); //Desabilita o sensor direito
 
-	laserEsq.setAddress(0x23);
+	laserEsq.setAddress(0x23); //Altera o endereço do sensor esquerdo
 	delay(10);
 
-	laserDir.habilitar();
+	laserDir.habilitar(); //Habilita o sensor esquerdo
 
+	//Inicia os sensores laser
 	laserDir.iniciar();
 	laserEsq.iniciar();
 	//Inicia o acelerometro
@@ -41,6 +46,7 @@ void setup()
 	giroscopio.init();
 	giroscopio.enableDefault();
 
+	//Inicia o filtro média móvel do acelerômetro
 	for (int i = 0; i < nMedidaAcel; i++)
 	{
 		medidaAcel[i] = 0;
