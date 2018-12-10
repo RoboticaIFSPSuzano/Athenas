@@ -1,7 +1,8 @@
-void retorno()
+void retorno() //Executa a encruzilhada em que o robô deve retornar
 {
-	pidGiro(180);
+	pidGiro(180); //Gira o robô 180º
 
+	//Ajusta o robô a linha
 	para(100);
 	refletancia.read(sensores);
 	while (sensores[5] > corte || sensores[0] > corte)
@@ -10,18 +11,29 @@ void retorno()
 	}
 }
 
-void curvadir()
+void curvadir()//Verifica qual o tipo de curva ou redutor e executa a resposta
 {
-	//Verifica se é uma curva, e executa a resposta prevista
-
-	int curva = 0;
-
 	para(500);
 	//Se desloca um pouco para frente para verificar se: é uma curva, é uma curva com fita verde ou é uma encruzilhada.
 	motores.setLeftSpeed(150);
 	motores.setRightSpeed(150);
 	delay(0.7*tempo1);
 	para(500);
+
+	for (int i = 0; i < 25; i++) //Faz as leituras para verificar se é um redutor
+	{
+		acelerometro.medirFiltrado();
+	}
+
+	if (acelerometro.eixoX > 1) //Verifica se é um redutor e supera-o
+	{
+		motores.setSpeeds(400, 400);
+
+		delay(250);
+
+		para(100);
+		return;
+	}
 
 	//Verfica a configuração da linha
 	refletancia.read(sensores);
@@ -106,11 +118,8 @@ void curvadir()
 
 }
 
-void curvaesq()
+void curvaesq() //Verifica qual o tipo de curva ou redutor e executa a resposta
 {
-	//Verifica se é uma curva, e executa a resposta prevista
-
-	int curva = 0;
 
 	para(500);
 	//Se desloca um pouco para frente para verificar se: é uma curva, é uma curva com fita verde ou é uma encruzilhada.
@@ -118,6 +127,22 @@ void curvaesq()
 	motores.setRightSpeed(150);
 	delay(0.7*tempo1);
 	para(500);
+
+	for (int i = 0; i < 25; i++) //Faz as leituras para verificar se é um redutor
+	{
+		acelerometro.medirFiltrado();
+	}
+
+	if (acelerometro.eixoX > 1) //Verifica se é um redutor e supera-o
+	{
+		motores.setSpeeds(400, 400);
+
+		delay(250);
+
+		para(100);
+		return;
+	}
+
 	//Verfica a configuração da linha
 	refletancia.read(sensores);
 
@@ -290,7 +315,7 @@ void obstaculo()
 	}
 }
 
-void bolinha()
+void bolinha() //Captura uma bolinha?
 {
 	garra.girar(180);
 	ponta.girar(90);
@@ -303,13 +328,14 @@ void bolinha()
 	garra.girar(0);
 }
 
-void sala3()
+void sala3() //Efetua a programação da sala 3
 {
 
 }
 
-void rampa()
+void rampa() //Passa pela rampa
 {
+	//Desce a garra
 	para(1000);
 	garra.girar(180);
 
@@ -321,22 +347,26 @@ void rampa()
 		pidLinha(200);
 	  }*/
 
+	//Anda pela rampa
 	do
 	{
 		pidLinha(300);
 		acelerometro.medirFiltrado();
-	} while (acelerometro.eixoX > 1.0);
+	} while (acelerometro.eixoX > 1.0); //Verfica se ela terminou
 
 
+	//Anda mais um pouco
 	motores.setSpeeds(300, 300);
 	delay(500);
 
 	para(100);
 
 	refletancia.read(sensores);
+	
+	//Sobe a garra
 	garra.girar(10);
 
-	sala3();
+	sala3(); //Efetua a programação para a sala 3
 }
 
 void obr()
@@ -368,21 +398,20 @@ void obr()
 		}
 	}
 
-	pidLinha();
+	pidLinha(); //Segue linha
 
-	acelerometro.medirFiltrado();
+	acelerometro.medirFiltrado(); //Efetua a leitura do acelerômetro
 
-	if (acelerometro.eixoX > 2.5)
+	if (acelerometro.eixoX > 2.5) //Verifica se o robô está na rampa
 	{
 		rampa();
 	}
 
-	ultraFrente.leitura();
+	ultraFrente.leitura(); //Efetua a leitura do sensor ultrassônico
 
-	if (ultraFrente.distancia < 6.0 && ultraFrente.distancia >1)
+	if (ultraFrente.distancia < 6.0 && ultraFrente.distancia >1) //Verifica se há um obstáculo
 	{
 		para(10);
 		obstaculo();
-		obst = 0;
 	}
 }

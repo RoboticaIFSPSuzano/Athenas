@@ -990,39 +990,39 @@ public:
 	  }*/
 };
 
-class Laser : public VL53L0X
+class Laser : public VL53L0X //Controla os sensores laser
 {
 public:
 
-	float distancia;
-	int pinShutDown;
+	float distancia; //Leitura do sensor
+	int pinShutDown; //Pino de shutdown
 
-	void setShutDown(int pin)
+	void setShutDown(int pin) //Define o pino de shutdown
 	{
 		pinShutDown = pin;
 
 		pinMode(pinShutDown, OUTPUT);
 	}
 
-	void iniciar()
+	void iniciar() //Inicia o sensor em leitura contínua
 	{
 		init();
 		setTimeout(500);
 		startContinuous();
 	}
 
-	void leitura()
+	void leitura() //Efetua uma leitura e converte para cm
 	{
 		distancia = readRangeContinuousMillimeters();
 		distancia /= 10;
 	}
 
-	void habilitar()
+	void habilitar() //Habilita o sensor
 	{
 		digitalWrite(pinShutDown, HIGH);
 	}
 
-	void desabilitar()
+	void desabilitar() //Desabilita o sensor
 	{
 		digitalWrite(pinShutDown, LOW);
 	}
@@ -1032,19 +1032,20 @@ class Buzzer
 {
 public:
 
-	int porta,
-		estado;
+	int porta, //Porta do buzzer
+		estado; //Estado (ligado 1, desligado 0)
 
-	Buzzer(int porta)
+	Buzzer(int porta) //Inicia o buzzer
 	{
 		this->porta = porta;
 
-		estado = 0;
+		//Define o estado inicial como desligado
+		estado = 0; 
 
 		digitalWrite(porta, estado);
 	}
 
-	void pulsar(int vezes)
+	void pulsar(int vezes) //Pulsa n vezes
 	{
 		if (estado)
 		{
@@ -1063,7 +1064,7 @@ public:
 		}
 	}
 
-	void ligar()
+	void ligar() //Liga ou desliga o buzzer
 	{
 		if (estado)
 		{
@@ -1078,43 +1079,43 @@ public:
 	}
 };
 
-class MediaMovel
+class MediaMovel //Implementa um filtro do tipo média móvel
 {
 public:
-	float *leitura,
-		valor;
+	float *leitura, //Vetor para armazenar as leituras
+		valor; //Valor de saída
 
-	int periodo;
+	int periodo; //Período para filtragem
 
-	MediaMovel(int periodo, float *leitura)
+	MediaMovel(int periodo, float *leitura) //Recebe vetor e o período
 	{
 		this->periodo = periodo;
 		this->leitura = leitura;
 
-		for (int k = 0; k < periodo; k++)
+		for (int k = 0; k < periodo; k++) //Inicia o vetor de leituras
 		{
 			leitura[k] = 0.0;
 		}
 	}
 
-	void entrar(float entrada)
+	void entrar(float entrada) //Entra uma nova leitura
 	{
 		//Movimenta os valores atuais para os antigos
 		float soma = 0;
 
-		for (int k = periodo; k > 0; k--)
+		for (int k = periodo; k > 0; k--) //Movimenta os valores uma varíavel para cima
 		{
 			leitura[k] = leitura[k - 1]; //Valor antigo = valor recente
 			soma += leitura[k]; //Soma os valores das leituras
 		}
 
-		leitura[0] = entrada;
-		valor += leitura[0];
+		leitura[0] = entrada; //Insere o novo valor no vetor
+		valor += leitura[0]; //Soma o novo valor
 
-		valor = soma / periodo;
+		valor = soma / periodo; //Calcula o valor de saída
 	}
 
-	float sair()
+	float sair() //Retorna o valor filtrado
 	{
 		return valor;
 	}

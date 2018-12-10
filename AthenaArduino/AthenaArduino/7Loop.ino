@@ -1,4 +1,4 @@
 void loop()
 {
-	obr();
+	obr(); //Executa a programação para a OBR
 }
